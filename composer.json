@@ -1,0 +1,39 @@
+{
+    "name": "carcel/user-bundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "description": "A ready to use UserBundle",
+    "keywords": ["User management"],
+    "homepage": "https://github.com/damien-carcel/UserBundle",
+    "authors": [
+        {
+            "name": "Damien Carcel",
+            "email": "damien.carcel@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Carcel\\Bundle\\UserBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Carcel\\Bundle\\UserBundle\\spec\\": "spec/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "^3.0",
+        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "^1.6",
+        "symfony/swiftmailer-bundle": "^2.3",
+        "friendsofsymfony/user-bundle": "^2.0@dev"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.4",
+        "squizlabs/php_codesniffer": "^2.5",
+        "phpmd/phpmd": "^2.4",
+        "friendsofphp/php-cs-fixer": "^2.0@dev",
+        "henrikbjorn/phpspec-code-coverage": "^1.0"
+    }
+}
