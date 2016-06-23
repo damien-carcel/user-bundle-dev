@@ -114,9 +114,17 @@ fos_user:
 carcel_user:
     resource: "@CarcelUserBundle/Resources/config/routing.yml"
     prefix: /
+
+# redirecting the root
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /
+        permanent: true
 ```
 
-You should now be able to clear the application cache without any error
+You should now be able to clear the application cache without any error.
 
 ```bash
 bin/console cache:clear

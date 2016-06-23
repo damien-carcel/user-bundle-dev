@@ -1,5 +1,5 @@
 services:
-    carcel_user.factory._user_form:
+    carcel_user.factory.user_form:
         class: Carcel\Bundle\UserBundle\Form\Factory\UserFormFactory
         arguments:
             - '@form.factory'
