@@ -2,7 +2,7 @@
 
 namespace Carcel\Bundle\UserBundle\Manager;
 
-use Carcel\Bundle\UserBundle\Entity\User;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -53,11 +53,11 @@ class RolesManager
     /**
      * Gets the current role of a user.
      *
-     * @param User $user
+     * @param UserInterface $user
      *
      * @return string
      */
-    public function getUserRole(User $user)
+    public function getUserRole(UserInterface $user)
     {
         $userRoles = $user->getRoles();
 

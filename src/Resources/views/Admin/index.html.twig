@@ -5,7 +5,7 @@
     {% if previous is defined %}
         {{ previous }}
     {% else %}
-        '/'
+        {{ path('root') }}
     {% endif %}
     "
        class="btn btn-default pull-right">

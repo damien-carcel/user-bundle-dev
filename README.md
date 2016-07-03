@@ -90,7 +90,7 @@ framework:
     translator: { fallbacks: ["%locale%"] }
 ```
 
-Then add the following lines:
+Then add the following lines to the application configuration:
 
 ```yaml
 # app/config/config.yml
@@ -99,9 +99,14 @@ fos_user:
     db_driver: orm
     firewall_name: main # This must be the firewall you define in the previous step, whatever the name you gave it
     user_class: Carcel\Bundle\UserBundle\Entity\User
+```
 
-carcel_user:
-    mailer_address: your.address@your.domain
+Then add the following parameters (don't forget to add it to your `app/config/parameters.yml.dist` file too):
+
+```yaml
+#app/config/parameters.yml
+
+carcel_user_mailer_address: your.address@your.domain
 ```
 
 Finally, import the routing:
@@ -114,9 +119,17 @@ fos_user:
 carcel_user:
     resource: "@CarcelUserBundle/Resources/config/routing.yml"
     prefix: /
+
+# redirecting the root
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /
+        permanent: true
 ```
 
-You should now be able to clear the application cache without any error
+You should now be able to clear the application cache without any error.
 
 ```bash
 bin/console cache:clear

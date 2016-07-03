@@ -55,10 +55,13 @@ class MailManager
      *
      * @param string $email
      * @param string $username
+     *
+     * @return int The number of successful recipients. Can be 0 which indicates failure
      */
     public function send($email, $username)
     {
-        $message = \Swift_Message::newInstance()
+        $message = \Swift_Message::newInstance();
+        $message
             ->setSubject($this->translator->trans('carcel_user.account.remove'))
             ->setFrom($this->mailerAddress)
             ->setTo($email)
@@ -69,6 +72,6 @@ class MailManager
                 )
             );
 
-        $this->mailer->send($message);
+        return $this->mailer->send($message);
     }
 }

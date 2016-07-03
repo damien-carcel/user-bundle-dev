@@ -1,7 +1,7 @@
 Carcel\Bundle\UserBundle\Entity\User:
     type:  entity
     table: carcel_user_user
-    repositoryClass: Carcel\Bundle\UserBundle\Entity\UserRepository
+    repositoryClass: Carcel\Bundle\UserBundle\Entity\Repository\UserRepository
     id:
         id:
             type: integer

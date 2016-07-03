@@ -2,8 +2,12 @@
 
 namespace Carcel\Bundle\UserBundle\Controller;
 
+use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
+use Carcel\Bundle\UserBundle\Form\Factory\UserFormFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Global administration of the application users.
@@ -12,12 +16,12 @@ use Symfony\Component\HttpFoundation\Request;
  * @copyright 2016 Damien Carcel (https://github.com/damien-carcel)
  * @license   https://opensource.org/licenses/mit   The MIT license (MIT)
  */
-class UserController extends Controller
+class AdminController extends Controller
 {
     /**
      * Returns a list of all the application users, except the SUPER_ADMIN.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function indexAction()
     {
@@ -39,7 +43,7 @@ class UserController extends Controller
      *
      * @param int $id
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function showProfileAction($id)
     {
@@ -57,7 +61,7 @@ class UserController extends Controller
      * @param Request $request
      * @param int     $id
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function setRoleAction(Request $request, $id)
     {
@@ -80,7 +84,7 @@ class UserController extends Controller
                 $this->get('translator')->trans('carcel_user.notice.set_role')
             );
 
-            return $this->redirect($this->generateUrl('carcel_user_admin'));
+            return $this->redirect($this->generateUrl('carcel_user_admin_index'));
         }
 
         return $this->render(
@@ -97,7 +101,7 @@ class UserController extends Controller
      *
      * @param int $id
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function editProfileAction($id)
     {
@@ -120,7 +124,7 @@ class UserController extends Controller
      * @param Request $request
      * @param int     $id
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function updateProfileAction(Request $request, $id)
     {
@@ -141,7 +145,7 @@ class UserController extends Controller
                 $this->get('translator')->trans('carcel_user.notice.update')
             );
 
-            return $this->redirect($this->generateUrl('carcel_user_admin'));
+            return $this->redirect($this->generateUrl('carcel_user_admin_index'));
         }
 
         return $this->render(
@@ -157,7 +161,7 @@ class UserController extends Controller
      * @param Request $request
      * @param int     $id
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function removeUserAction(Request $request, $id)
     {
@@ -180,11 +184,11 @@ class UserController extends Controller
             $this->get('carcel_user.manager.mail')->send($email, $username);
         }
 
-        return $this->redirect($this->generateUrl('carcel_user_admin'));
+        return $this->redirect($this->generateUrl('carcel_user_admin_index'));
     }
 
     /**
-     * @return \Carcel\Bundle\UserBundle\Entity\UserRepository
+     * @return UserRepositoryInterface
      */
     protected function getUserRepository()
     {
@@ -192,10 +196,10 @@ class UserController extends Controller
     }
 
     /**
-     * @return \Carcel\Bundle\UserBundle\Form\Factory\UserFormFactory
+     * @return UserFormFactoryInterface
      */
     protected function getFormCreator()
     {
-        return $this->get('carcel_user.factory._user_form');
+        return $this->get('carcel_user.factory.user_form');
     }
 }
