@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @copyright 2016 Damien Carcel (https://github.com/damien-carcel)
  * @license   https://opensource.org/licenses/mit   The MIT license (MIT)
  */
-class UserController extends Controller
+class AdminController extends Controller
 {
     /**
      * Returns a list of all the application users, except the SUPER_ADMIN.
@@ -84,7 +84,7 @@ class UserController extends Controller
                 $this->get('translator')->trans('carcel_user.notice.set_role')
             );
 
-            return $this->redirect($this->generateUrl('carcel_user_admin'));
+            return $this->redirect($this->generateUrl('carcel_user_admin_index'));
         }
 
         return $this->render(
@@ -145,7 +145,7 @@ class UserController extends Controller
                 $this->get('translator')->trans('carcel_user.notice.update')
             );
 
-            return $this->redirect($this->generateUrl('carcel_user_admin'));
+            return $this->redirect($this->generateUrl('carcel_user_admin_index'));
         }
 
         return $this->render(
@@ -184,7 +184,7 @@ class UserController extends Controller
             $this->get('carcel_user.manager.mail')->send($email, $username);
         }
 
-        return $this->redirect($this->generateUrl('carcel_user_admin'));
+        return $this->redirect($this->generateUrl('carcel_user_admin_index'));
     }
 
     /**

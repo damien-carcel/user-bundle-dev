@@ -1,5 +1,5 @@
 parameters:
-    carcel_user.mailer_address: noresponse
+    carcel_user_mailer_address: noresponse
 
 services:
     carcel_user.manager.mail:
@@ -9,7 +9,7 @@ services:
             - '@mailer'
             - '@translator'
             - '%kernel.default_locale%'
-            - '%carcel_user.mailer_address%'
+            - '%carcel_user_mailer_address%'
 
     carcel_user.manager.roles:
         class: Carcel\Bundle\UserBundle\Manager\RolesManager
