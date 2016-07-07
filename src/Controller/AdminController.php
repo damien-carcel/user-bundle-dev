@@ -26,7 +26,7 @@ class AdminController extends Controller
     public function indexAction()
     {
         $currentUser = $this->getUser();
-        $users       = $this->getUserRepository()->getAllBut($currentUser->getId());
+        $users = $this->getUserRepository()->getAllBut($currentUser->getId());
         $deleteForms = $this->getFormCreator()->createDeleteForms($users, 'carcel_user_admin_remove');
 
         return $this->render(
@@ -66,10 +66,10 @@ class AdminController extends Controller
     public function setRoleAction(Request $request, $id)
     {
         $rolesManager = $this->get('carcel_user.manager.roles');
-        $user         = $this->getUserRepository()->findOneByIdOr404($id);
-        $userRole     = $rolesManager->getUserRole($user);
-        $choices      = $rolesManager->getChoices();
-        $form         = $this->getFormCreator()->createSetRoleForm($choices, $userRole);
+        $user = $this->getUserRepository()->findOneByIdOr404($id);
+        $userRole = $rolesManager->getUserRole($user);
+        $choices = $rolesManager->getChoices();
+        $form = $this->getFormCreator()->createSetRoleForm($choices, $userRole);
 
         $form->handleRequest($request);
 
@@ -169,8 +169,8 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $user     = $this->getUserRepository()->findOneByIdOr404($id);
-            $email    = $user->getEmail();
+            $user = $this->getUserRepository()->findOneByIdOr404($id);
+            $email = $user->getEmail();
             $username = $user->getUsername();
 
             $this->get('doctrine.orm.entity_manager')->remove($user);

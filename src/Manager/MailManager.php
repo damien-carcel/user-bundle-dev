@@ -43,10 +43,10 @@ class MailManager
         $locale,
         $mailerAddress
     ) {
-        $this->templating    = $templating;
-        $this->mailer        = $mailer;
-        $this->translator    = $translator;
-        $this->locale        = $locale;
+        $this->templating = $templating;
+        $this->mailer = $mailer;
+        $this->translator = $translator;
+        $this->locale = $locale;
         $this->mailerAddress = $mailerAddress;
     }
 

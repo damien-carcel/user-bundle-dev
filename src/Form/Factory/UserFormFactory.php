@@ -37,8 +37,8 @@ class UserFormFactory implements UserFormFactoryInterface
         TranslatorInterface $translator
     ) {
         $this->formFactory = $formFactory;
-        $this->router      = $router;
-        $this->translator  = $translator;
+        $this->router = $router;
+        $this->translator = $translator;
     }
 
     /**
@@ -90,11 +90,11 @@ class UserFormFactory implements UserFormFactoryInterface
             [
                 'label' => $this->translator->trans('carcel_user.button.delete'),
                 'attr'  => [
+                    'class'   => 'btn btn-sm btn-default',
                     'onclick' => sprintf(
                         'return confirm("%s")',
                         $this->translator->trans('carcel_user.notice.delete.confirmation')
                     ),
-                    'class'   => 'btn btn-sm btn-default'
                 ],
             ]
         );
