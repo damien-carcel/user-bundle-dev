@@ -4,10 +4,12 @@ namespace Carcel\Bundle\UserBundle\Controller;
 
 use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
 use Carcel\Bundle\UserBundle\Form\Factory\UserFormFactoryInterface;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Global administration of the application users.
@@ -19,15 +21,16 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminController extends Controller
 {
     /**
-     * Returns a list of all the application users, except the SUPER_ADMIN.
+     * Returns a list of all the application users, except the current user
+     * (if the application is correctly configured, it should be the super admin).
      *
      * @return Response
      */
     public function indexAction()
     {
         $currentUser = $this->getUser();
-        $users = $this->getUserRepository()->getAllBut($currentUser->getId());
-        $deleteForms = $this->getFormCreator()->createDeleteForms($users, 'carcel_user_admin_remove');
+        $users = $this->getUserRepository()->findAllBut($currentUser);
+        $deleteForms = $this->getUserFormFactory()->createDeleteFormViews($users, 'carcel_user_admin_remove');
 
         return $this->render(
             'CarcelUserBundle:Admin:index.html.twig',
@@ -41,13 +44,13 @@ class AdminController extends Controller
     /**
      * Shows a user profile.
      *
-     * @param int $id
+     * @param string $username
      *
      * @return Response
      */
-    public function showProfileAction($id)
+    public function showProfileAction($username)
     {
-        $user = $this->getUserRepository()->findOneByIdOr404($id);
+        $user = $this->findUserByUsernameOr404($username);
 
         return $this->render(
             'CarcelUserBundle:Admin:show.html.twig',
@@ -59,17 +62,17 @@ class AdminController extends Controller
      * Changes the user's role.
      *
      * @param Request $request
-     * @param int     $id
+     * @param string  $username
      *
      * @return RedirectResponse|Response
      */
-    public function setRoleAction(Request $request, $id)
+    public function setRoleAction(Request $request, $username)
     {
         $rolesManager = $this->get('carcel_user.manager.roles');
-        $user = $this->getUserRepository()->findOneByIdOr404($id);
+        $user = $this->findUserByUsernameOr404($username);
         $userRole = $rolesManager->getUserRole($user);
         $choices = $rolesManager->getChoices();
-        $form = $this->getFormCreator()->createSetRoleForm($choices, $userRole);
+        $form = $this->getUserFormFactory()->createSetRoleForm($choices, $userRole);
 
         $form->handleRequest($request);
 
@@ -99,14 +102,14 @@ class AdminController extends Controller
     /**
      * Displays a form to edit a user profile.
      *
-     * @param int $id
+     * @param string $username
      *
      * @return RedirectResponse|Response
      */
-    public function editProfileAction($id)
+    public function editProfileAction($username)
     {
-        $user = $this->getUserRepository()->findOneByIdOr404($id);
-        $form = $this->getFormCreator()->createEditForm(
+        $user = $this->findUserByUsernameOr404($username);
+        $form = $this->getUserFormFactory()->createEditForm(
             $user,
             'Carcel\Bundle\UserBundle\Form\Type\UserType',
             'carcel_user_admin_update'
@@ -122,14 +125,14 @@ class AdminController extends Controller
      * Updates a user's profile.
      *
      * @param Request $request
-     * @param int     $id
+     * @param string  $username
      *
      * @return RedirectResponse|Response
      */
-    public function updateProfileAction(Request $request, $id)
+    public function updateProfileAction(Request $request, $username)
     {
-        $user = $this->getUserRepository()->findOneByIdOr404($id);
-        $form = $this->getFormCreator()->createEditForm(
+        $user = $this->findUserByUsernameOr404($username);
+        $form = $this->getUserFormFactory()->createEditForm(
             $user,
             'Carcel\Bundle\UserBundle\Form\Type\UserType',
             'carcel_user_admin_update'
@@ -159,19 +162,18 @@ class AdminController extends Controller
      * his account has been destroyed.
      *
      * @param Request $request
-     * @param int     $id
+     * @param string  $username
      *
      * @return RedirectResponse|Response
      */
-    public function removeUserAction(Request $request, $id)
+    public function removeUserAction(Request $request, $username)
     {
-        $form = $this->getFormCreator()->createDeleteForm($id, 'carcel_user_admin_remove');
+        $form = $this->getUserFormFactory()->createDeleteForm($username, 'carcel_user_admin_remove');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $user = $this->getUserRepository()->findOneByIdOr404($id);
+            $user = $this->findUserByUsernameOr404($username);
             $email = $user->getEmail();
-            $username = $user->getUsername();
 
             $this->get('doctrine.orm.entity_manager')->remove($user);
             $this->get('doctrine.orm.entity_manager')->flush();
@@ -188,6 +190,29 @@ class AdminController extends Controller
     }
 
     /**
+     * Finds and returns a User from its username.
+     *
+     * @param string $username
+     *
+     * @throws NotFoundHttpException
+     *
+     * @return UserInterface
+     */
+    protected function findUserByUsernameOr404($username)
+    {
+        $user = $this->getUserRepository()->findOneBy(['username' => $username]);
+
+        if (null === $user) {
+            throw new  NotFoundHttpException(
+                'The user with the name %username% does not exists',
+                ['%username%' => $username]
+            );
+        }
+
+        return $user;
+    }
+
+    /**
      * @return UserRepositoryInterface
      */
     protected function getUserRepository()
@@ -198,7 +223,7 @@ class AdminController extends Controller
     /**
      * @return UserFormFactoryInterface
      */
-    protected function getFormCreator()
+    protected function getUserFormFactory()
     {
         return $this->get('carcel_user.factory.user_form');
     }

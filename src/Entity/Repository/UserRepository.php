@@ -3,7 +3,7 @@
 namespace Carcel\Bundle\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User repository.
@@ -17,28 +17,11 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findOneByIdOr404($id)
-    {
-        $user = $this->find($id);
-
-        if (null === $user) {
-            throw new  NotFoundHttpException(
-                'The user with the ID %id% does not exists',
-                ['%id%' => $id]
-            );
-        }
-
-        return $user;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAllBut($id)
+    public function findAllBut(UserInterface $user)
     {
         $query = $this->createQueryBuilder('u')
-            ->where('u.id != :id')
-            ->setParameter('id', $id)
+            ->where('u.username != :username')
+            ->setParameter('username', $user->getUsername())
             ->orderBy('u.username')
             ->getQuery();
 
