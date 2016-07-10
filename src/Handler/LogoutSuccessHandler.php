@@ -22,7 +22,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     {
         $url = $request->headers->get('referer');
 
-        if (isset($url)) {
+        if (null !== $url) {
             return new RedirectResponse($url);
         }
 

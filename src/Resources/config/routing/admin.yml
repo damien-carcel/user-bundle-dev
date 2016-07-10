@@ -3,24 +3,24 @@ carcel_user_admin_index:
     defaults: { _controller: CarcelUserBundle:Admin:index }
 
 carcel_user_admin_show:
-    path: /{id}/show
+    path: /{username}/show
     defaults: { _controller: CarcelUserBundle:Admin:showProfile }
 
 carcel_user_admin_edit:
-    path: /{id}/edit
+    path: /{username}/edit
     defaults: { _controller: CarcelUserBundle:Admin:editProfile }
 
 carcel_user_admin_update:
-    path: /{id}/update
+    path: /{username}/update
     defaults: { _controller: CarcelUserBundle:Admin:updateProfile }
     methods:  [POST, PUT]
 
 carcel_user_admin_set_role:
-    path: /{id}/role
+    path: /{username}/role
     defaults: { _controller: CarcelUserBundle:Admin:setRole }
     methods:  [GET, POST, PUT]
 
 carcel_user_admin_remove:
-    path: /{id}/delete
+    path: /{username}/delete
     defaults: { _controller: CarcelUserBundle:Admin:removeUser }
     methods:  [POST, DELETE]

@@ -15,9 +15,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 class MailManager
 {
     /** @var string */
-    protected $locale;
-
-    /** @var string */
     protected $mailerAddress;
 
     /** @var \Swift_Mailer */
@@ -33,20 +30,17 @@ class MailManager
      * @param EngineInterface     $templating
      * @param \Swift_Mailer       $mailer
      * @param TranslatorInterface $translator
-     * @param string              $locale
      * @param string              $mailerAddress
      */
     public function __construct(
         EngineInterface $templating,
         \Swift_Mailer $mailer,
         TranslatorInterface $translator,
-        $locale,
         $mailerAddress
     ) {
-        $this->templating    = $templating;
-        $this->mailer        = $mailer;
-        $this->translator    = $translator;
-        $this->locale        = $locale;
+        $this->templating = $templating;
+        $this->mailer = $mailer;
+        $this->translator = $translator;
         $this->mailerAddress = $mailerAddress;
     }
 

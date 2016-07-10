@@ -27,7 +27,7 @@ class RolesManager
     public function __construct(TranslatorInterface $translator, array $roles)
     {
         $this->translator = $translator;
-        $this->roles      = $roles;
+        $this->roles = $roles;
     }
 
     /**

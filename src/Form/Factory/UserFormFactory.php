@@ -6,6 +6,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -37,14 +38,14 @@ class UserFormFactory implements UserFormFactoryInterface
         TranslatorInterface $translator
     ) {
         $this->formFactory = $formFactory;
-        $this->router      = $router;
-        $this->translator  = $translator;
+        $this->router = $router;
+        $this->translator = $translator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createCreateForm($item, $type, $url)
+    public function createCreateForm(UserInterface $item, $type, $url)
     {
         $form = $this->formFactory->create(
             $type,
@@ -61,13 +62,13 @@ class UserFormFactory implements UserFormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createEditForm($item, $type, $url)
+    public function createEditForm(UserInterface $item, $type, $url)
     {
         $form = $this->formFactory->create(
             $type,
             $item,
             [
-                'action' => $this->router->generate($url, ['id' => $item->getId()]),
+                'action' => $this->router->generate($url, ['username' => $item->getUsername()]),
                 'method' => 'PUT',
             ]
         );
@@ -78,11 +79,11 @@ class UserFormFactory implements UserFormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createDeleteForm($id, $url)
+    public function createDeleteForm($username, $url)
     {
         $formBuilder = $this->formFactory->createBuilder();
 
-        $formBuilder->setAction($this->router->generate($url, ['id' => $id]));
+        $formBuilder->setAction($this->router->generate($url, ['username' => $username]));
         $formBuilder->setMethod('DELETE');
         $formBuilder->add(
             'submit',
@@ -90,11 +91,11 @@ class UserFormFactory implements UserFormFactoryInterface
             [
                 'label' => $this->translator->trans('carcel_user.button.delete'),
                 'attr'  => [
+                    'class'   => 'btn btn-sm btn-default',
                     'onclick' => sprintf(
                         'return confirm("%s")',
                         $this->translator->trans('carcel_user.notice.delete.confirmation')
                     ),
-                    'class'   => 'btn btn-sm btn-default'
                 ],
             ]
         );
@@ -105,12 +106,12 @@ class UserFormFactory implements UserFormFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createDeleteForms(array $items, $url)
+    public function createDeleteFormViews(array $items, $url)
     {
         $deleteForms = [];
 
         foreach ($items as $item) {
-            $deleteForms[$item->getId()] = $this->createDeleteForm($item->getId(), $url)->createView();
+            $deleteForms[$item->getUsername()] = $this->createDeleteForm($item->getUsername(), $url)->createView();
         }
 
         return $deleteForms;

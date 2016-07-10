@@ -32,7 +32,7 @@ class UserType extends AbstractType
     public function __construct(TranslatorInterface $translator, $class)
     {
         $this->translator = $translator;
-        $this->class      = $class;
+        $this->class = $class;
     }
 
     /**

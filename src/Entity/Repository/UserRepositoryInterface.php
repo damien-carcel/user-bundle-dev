@@ -2,8 +2,8 @@
 
 namespace Carcel\Bundle\UserBundle\Entity\Repository;
 
-use FOS\UserBundle\Model\UserInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User repository interface.
@@ -12,25 +12,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @copyright 2016 Damien Carcel (https://github.com/damien-carcel)
  * @license   https://opensource.org/licenses/mit   The MIT license (MIT)
  */
-interface UserRepositoryInterface
+interface UserRepositoryInterface extends ObjectRepository
 {
     /**
-     * Finds and returns a User entity from its ID.
+     * Retrieves all users but one.
      *
-     * @param int $id
+     * @param UserInterface $user The user we don\'t want to be returned.
      *
-     * @throws NotFoundHttpException
-     *
-     * @return UserInterface
+     * @return UserInterface[]
      */
-    public function findOneByIdOr404($id);
-
-    /**
-     * Retrieve all users but one.
-     *
-     * @param int $id The user we don\'t want to be returned.
-     *
-     * @return array
-     */
-    public function getAllBut($id);
+    public function findAllBut(UserInterface $user);
 }

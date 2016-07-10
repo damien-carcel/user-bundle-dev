@@ -1,5 +1,5 @@
 parameters:
-    carcel_user_mailer_address: noresponse
+    carcel_user_mailer_address: noresponse@example.info
 
 services:
     carcel_user.manager.mail:
@@ -8,7 +8,6 @@ services:
             - '@templating'
             - '@mailer'
             - '@translator'
-            - '%kernel.default_locale%'
             - '%carcel_user_mailer_address%'
 
     carcel_user.manager.roles:

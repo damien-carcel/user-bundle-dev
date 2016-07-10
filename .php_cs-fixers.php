@@ -1,8 +1,7 @@
 <?php
 
 return [
-    '-unalign_equals',
-    '-unalign_double_arrow',
+    'unalign_equals',
     'concat_without_spaces',
     'empty_return',
     'multiline_array_trailing_comma',
