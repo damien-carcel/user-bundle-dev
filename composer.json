@@ -13,28 +13,35 @@
     ],
     "autoload": {
         "psr-4": {
-            "Carcel\\Bundle\\UserBundle\\": "src/"
+            "Carcel\\Bundle\\UserBundle\\": "src/",
+            "Context\\": "features/bootstrap"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Carcel\\Bundle\\UserBundle\\spec\\": "spec/"
+            "spec\\Carcel\\Bundle\\UserBundle\\": "spec/"
         }
     },
     "require": {
         "php": ">=5.5.9",
-        "symfony/framework-bundle": "^3.0",
         "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
+        "symfony/framework-bundle": "^3.0",
         "symfony/swiftmailer-bundle": "^2.3",
         "friendsofsymfony/user-bundle": "^2.0@dev"
     },
     "require-dev": {
-        "phpspec/phpspec": "^2.4",
-        "squizlabs/php_codesniffer": "^2.5",
-        "phpmd/phpmd": "^2.4",
+        "behat/behat": "^3.1",
+        "behat/symfony2-extension": "^2.1",
+        "behat/mink": "^1.7",
+        "behat/mink-extension": "^2.2",
+        "behat/mink-browserkit-driver": "^1.3",
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
         "friendsofphp/php-cs-fixer": "^1.11",
-        "henrikbjorn/phpspec-code-coverage": "^1.0"
+        "phpmd/phpmd": "^2.4",
+        "phpspec/phpspec": "^2.4",
+        "phpunit/phpunit": "^5.4",
+        "squizlabs/php_codesniffer": "^2.5"
     },
     "config": {
         "bin-dir": "bin"

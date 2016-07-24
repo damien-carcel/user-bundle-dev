@@ -48,7 +48,5 @@ carcel_user:
         no_role: Sorry, your acount has no role for the moment. Wait for a confirmation mail.
 
 ROLE_USER: Base user
-ROLE_VIEWER: Viewer
-ROLE_UPLOADER: Uploader
 ROLE_ADMIN: Administrator
 ROLE_SUPER_ADMIN: Super administrator

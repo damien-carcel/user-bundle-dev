@@ -48,7 +48,5 @@ carcel_user:
         no_role: Désolé, aucun rôle n'a encore été attribué à votre compte. Attendez l'email de confirmation.
 
 ROLE_USER: Utilisateur basique
-ROLE_VIEWER: Spectateur
-ROLE_UPLOADER: Téléverseur
 ROLE_ADMIN: Administrateur
 ROLE_SUPER_ADMIN: Super administrateur

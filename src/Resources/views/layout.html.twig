@@ -32,7 +32,7 @@
                 |
                 {{ 'layout.logged_in_as'|trans({'%username%': ''}, 'FOSUserBundle') }}<a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a>
                 |
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('carcel_user_admin_index') }}">Page d'adminitration</a>
                     |
                 {% endif %}
