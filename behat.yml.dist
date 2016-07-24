@@ -9,7 +9,8 @@ default:
             lifetime: scenario
             autoload: false
             directories: ~
-            fixtures: Carcel\Bundle\UserBundle\DataFixtures\ORM
+            fixtures:
+                - Carcel\Bundle\UserBundle\DataFixtures\ORM\LoadUserData
     suites:
         default:
             contexts:
