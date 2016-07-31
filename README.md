@@ -13,7 +13,8 @@ This bundle is build upon the [FOSUserBundle](https://github.com/FriendsOfSymfon
 Require the bundle
 
 ```bash
-composer require carcel/user-bundle dev-master
+composer require friendsofsymfony/user-bundle "~2.0@dev"
+composer require carcel/user-bundle "dev-master"
 ```
 
 Then enable it and the FOSUserBundle in the application kernel
