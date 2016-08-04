@@ -1,7 +1,7 @@
 Feature: Manage a user account
   In order to manage my user account
   As a user
-  I need to interact with the administration page
+  I need to interact with the account page
 
   Background:
     Given I am on the homepage
