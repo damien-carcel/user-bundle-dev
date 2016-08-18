@@ -14,6 +14,7 @@ namespace Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
+use Carcel\Bundle\UserBundle\Manager\UserManager;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -96,7 +97,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
         $user = $this->getUserProvider()->loadUserByUsername($username);
 
         $user->setPasswordRequestedAt(new \DateTime());
-        $this->getUserManager()->updateUser($user);
+        $this->getFosUserManager()->updateUser($user);
     }
 
     /**
@@ -111,7 +112,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
         $providedUserNames = $this->listToArray($list);
         sort($providedUserNames);
 
-        $storedUsers = $this->getUsersInDatabase();
+        $storedUsers = $this->getCarcelUserManager()->getAdministrableUsers();
 
         $userNames = [];
         foreach ($storedUsers as $storedUser) {
@@ -175,24 +176,6 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
-     * @return UserInterface[]
-     */
-    protected function getUsersInDatabase()
-    {
-        $users = [];
-
-        $currentUser = $this->getTockenStorage()->getToken()->getUser();
-        $users[] = $currentUser;
-
-        if (!$currentUser->hasRole('ROLE_SUPER_ADMIN')) {
-            $superAdmin = $this->getUserRepository()->findByRole('ROLE_SUPER_ADMIN');
-            $users = array_merge($users, $superAdmin);
-        }
-
-        return $this->getUserRepository()->findAllBut($users);
-    }
-
-    /**
      * Finds a table row according to its content.
      *
      * @param $username
@@ -235,9 +218,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     /**
      * @return UserManagerInterface
      */
-    protected function getUserManager()
+    protected function getFosUserManager()
     {
         return $this->kernel->getContainer()->get('fos_user.user_manager');
+    }
+
+    /**
+     * @return UserManager
+     */
+    protected function getCarcelUserManager()
+    {
+        return $this->kernel->getContainer()->get('carcel_user.manager.users');
     }
 
     /**
