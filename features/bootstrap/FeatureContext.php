@@ -14,13 +14,13 @@ namespace Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
-use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
@@ -111,9 +111,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
         $providedUserNames = $this->listToArray($list);
         sort($providedUserNames);
 
-        $storedUsers = $this->getUserRepository()->findAllBut(
-            $this->getTockenStorage()->getToken()->getUser()
-        );
+        $storedUsers = $this->getUsersInDatabase();
 
         $userNames = [];
         foreach ($storedUsers as $storedUser) {
@@ -174,6 +172,24 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     {
         $user = $this->getUserRepository()->findOneBy(['username' => $username]);
         \PHPUnit_Framework_Assert::assertTrue($user->hasRole($role));
+    }
+
+    /**
+     * @return UserInterface[]
+     */
+    protected function getUsersInDatabase()
+    {
+        $users = [];
+
+        $currentUser = $this->getTockenStorage()->getToken()->getUser();
+        $users[] = $currentUser;
+
+        if (!$currentUser->hasRole('ROLE_SUPER_ADMIN')) {
+            $superAdmin = $this->getUserRepository()->findByRole('ROLE_SUPER_ADMIN');
+            $users = array_merge($users, $superAdmin);
+        }
+
+        return $this->getUserRepository()->findAllBut($users);
     }
 
     /**

@@ -15,7 +15,7 @@ Feature: Manage a user account
     Given I am on "profile"
     When I follow "Administration page"
     Then I should see "Administration of the users"
-    And I should see the users "admin, damien and lilith"
+    And I should see the users "damien and lilith"
 
   Scenario: A regular user should not be able to access the admin page
     Given I am on "admin"
@@ -41,18 +41,18 @@ Feature: Manage a user account
       | Email address | pandore@gmail.com |
     And I press "Update"
     Then I should see "User profile has been updated"
-    And I should see the users "admin, pandore and lilith"
-
-  Scenario: I can change a user role
-    Given I am on "admin"
-    When I follow "Change role" for "damien" profile
-    And I select "Administrator" from "Roles"
-    And I press "Change"
-    Then I should see "User role has been changed"
-    And user "damien" should have role "ROLE_ADMIN"
+    And I should see the users "pandore and lilith"
 
   Scenario: I can delete a user
     Given I am on "admin"
     When I press "Delete" for "damien" profile
     Then I should see "The user has been deleted"
-    And I should see the users "admin and lilith"
+    And I should see the users "lilith"
+
+  Scenario: I can change a user role
+    Given I am on "admin"
+    When I follow "Change role" for "damien" profile
+    And I select "Editor" from "Roles"
+    And I press "Change"
+    Then I should see "User role has been changed"
+    And user "damien" should have role "ROLE_EDITOR"
