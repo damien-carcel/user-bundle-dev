@@ -15,4 +15,4 @@ Feature: Manage a user account
     Given I am on "admin"
     When I press "Delete" for "damien" profile
     Then I should see "The user has been deleted"
-    And I should see the users "lilith"
+    And I should see the users "freya and lilith"

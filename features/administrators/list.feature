@@ -15,7 +15,7 @@ Feature: Manage a user account
     Given I am on "profile"
     When I follow "Administration page"
     Then I should see "Administration of the users"
-    And I should see the users "damien and lilith"
+    And I should see the users "damien, freya and lilith"
 
   Scenario: A regular user should not be able to access the admin page
     Given I am on "admin"

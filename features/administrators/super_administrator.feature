@@ -15,7 +15,7 @@ Feature: Administrate administrators
     Given I am on "profile"
     When I follow "Administration page"
     Then I should see "Administration of the users"
-    And I should see the users "aurore, damien and lilith"
+    And I should see the users "aurore, damien, freya and lilith"
 
   Scenario: I can promote a user as administrator
     Given I am on "admin"

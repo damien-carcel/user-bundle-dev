@@ -18,3 +18,17 @@ Feature: Manage a user account
     And I press "Change"
     Then I should see "User role has been changed"
     And user "damien" should have role "ROLE_EDITOR"
+
+  Scenario: I cannot promote a user as administrator
+    Given I am on "admin"
+    When I follow "Change role" for "damien" profile
+    Then I should see "Base user" in the "select" element
+    And I should see "Editor" in the "select" element
+    But I should not see "Administrator" in the "select" element
+    And I should not see "Super administrator" in the "select" element
+
+  Scenario: I cannot demote an administrator
+    When I am on "admin"
+    Then I should not see "Change role" in the table line containing "freya"
+    When I am on "admin/freya/role"
+    Then I should see "403 Forbidden"

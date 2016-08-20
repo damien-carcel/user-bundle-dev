@@ -176,6 +176,21 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
+     * Asserts that a specific table line does not contain a specific text.
+     *
+     * @param string $line
+     * @param string $text
+     *
+     * @Then /^I should not see "(?P<text>(?:[^"]|\\")*)" in the table line containing "(?P<line>(?:[^"]|\\")*)"$/
+     */
+    public function assertTableLineNotContainsText($line, $text)
+    {
+        $element = sprintf('table tr:contains("%s")', $line);
+
+        $this->assertElementNotContainsText($element, $text);
+    }
+
+    /**
      * Finds a table row according to its content.
      *
      * @param $username

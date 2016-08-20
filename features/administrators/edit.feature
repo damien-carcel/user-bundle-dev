@@ -20,7 +20,7 @@ Feature: Manage a user account
       | Email address | pandore@gmail.com |
     And I press "Update"
     Then I should see "User profile has been updated"
-    And I should see the users "pandore and lilith"
+    And I should see the users "pandore, freya and lilith"
 
   Scenario: I cannot edit the profile of the super admin
     When I am on "admin/admin/edit"
