@@ -12,6 +12,7 @@
 namespace Carcel\Bundle\UserBundle\Manager;
 
 use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -24,15 +25,20 @@ class RolesManager
     /** @var array */
     protected $roles;
 
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
+
     /** @var TranslatorInterface */
     protected $translator;
 
     /**
-     * @param TranslatorInterface $translator
-     * @param string[]            $roles
+     * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface   $translator
+     * @param string[]              $roles
      */
-    public function __construct(TranslatorInterface $translator, array $roles)
+    public function __construct(TokenStorageInterface $tokenStorage, TranslatorInterface $translator, array $roles)
     {
+        $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
         $this->roles = $roles;
     }
@@ -44,15 +50,14 @@ class RolesManager
      */
     public function getChoices()
     {
-        $choices = [];
-        $choices['ROLE_USER'] = 'ROLE_USER';
+        $choices = $this->getOrderedRoles();
 
-        $roles = array_keys($this->roles);
+        if (isset($choices['ROLE_SUPER_ADMIN'])) {
+            unset($choices['ROLE_SUPER_ADMIN']);
+        }
 
-        foreach ($roles as $role) {
-            if ($role !== 'ROLE_SUPER_ADMIN') {
-                $choices[$role] = $role;
-            }
+        if (isset($choices['ROLE_ADMIN']) && !$this->isCurrentUserSuperAdmin()) {
+            unset($choices['ROLE_ADMIN']);
         }
 
         return $choices;
@@ -67,15 +72,70 @@ class RolesManager
      */
     public function getUserRole(UserInterface $user)
     {
+        $currentRole = '';
         $userRoles = $user->getRoles();
 
-        $currentRole = '';
-        foreach ($this->roles as $role) {
-            if ($role[0] === $userRoles[0]) {
-                $currentRole = $role[0];
-            }
+        if (in_array($userRoles[0], $this->getOrderedRoles())) {
+            $currentRole = $userRoles[0];
         }
 
         return $currentRole;
+    }
+
+    /**
+     * Returns the list of roles, ordered by power level.
+     *
+     * Transform the "security.role_hierarchy.roles" parameter:
+     *
+     * [
+     *      'ROLE_ADMIN'       => ['ROLE_USER'],
+     *      'ROLE_SUPER_ADMIN' => ['ROLE_ADMIN'],
+     * ]
+     *
+     * into:
+     *
+     * [
+     *     'ROLE_USER'        => 'ROLE_USER',
+     *     'ROLE_ADMIN'       => 'ROLE_ADMIN',
+     *     'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+     * ]
+     *
+     * @return string[]
+     */
+    protected function getOrderedRoles()
+    {
+        $choices = [];
+
+        foreach ($this->roles as $key => $roles) {
+            foreach ($roles as $role) {
+                $choices[$role] = $role;
+            }
+
+            $choices[$key] = $key;
+        }
+
+        return $choices;
+    }
+
+    /**
+     * Checks that current user is super administrator or not.
+     *
+     * If this manager is used from command line (i.e. no token), then it is
+     * considered as used by a super administrator.
+     * Anonymous user, however, is not considered as a super administrator.
+     *
+     * @return bool True if he is, false if not.
+     */
+    protected function isCurrentUserSuperAdmin()
+    {
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return true;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return false;
+        }
+
+        return $user->isSuperAdmin();
     }
 }

@@ -14,13 +14,14 @@ namespace Context;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
-use FOS\UserBundle\Model\UserInterface;
+use Carcel\Bundle\UserBundle\Manager\UserManager;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
@@ -96,7 +97,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
         $user = $this->getUserProvider()->loadUserByUsername($username);
 
         $user->setPasswordRequestedAt(new \DateTime());
-        $this->getUserManager()->updateUser($user);
+        $this->getFosUserManager()->updateUser($user);
     }
 
     /**
@@ -111,9 +112,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
         $providedUserNames = $this->listToArray($list);
         sort($providedUserNames);
 
-        $storedUsers = $this->getUserRepository()->findAllBut(
-            $this->getTockenStorage()->getToken()->getUser()
-        );
+        $storedUsers = $this->getCarcelUserManager()->getAdministrableUsers();
 
         $userNames = [];
         foreach ($storedUsers as $storedUser) {
@@ -177,6 +176,21 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
+     * Asserts that a specific table line does not contain a specific text.
+     *
+     * @param string $line
+     * @param string $text
+     *
+     * @Then /^I should not see "(?P<text>(?:[^"]|\\")*)" in the table line containing "(?P<line>(?:[^"]|\\")*)"$/
+     */
+    public function assertTableLineNotContainsText($line, $text)
+    {
+        $element = sprintf('table tr:contains("%s")', $line);
+
+        $this->assertElementNotContainsText($element, $text);
+    }
+
+    /**
      * Finds a table row according to its content.
      *
      * @param $username
@@ -219,9 +233,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     /**
      * @return UserManagerInterface
      */
-    protected function getUserManager()
+    protected function getFosUserManager()
     {
         return $this->kernel->getContainer()->get('fos_user.user_manager');
+    }
+
+    /**
+     * @return UserManager
+     */
+    protected function getCarcelUserManager()
+    {
+        return $this->kernel->getContainer()->get('carcel_user.manager.users');
     }
 
     /**

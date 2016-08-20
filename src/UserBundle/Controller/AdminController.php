@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Global administration of the application users.
@@ -28,15 +29,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AdminController extends Controller
 {
     /**
-     * Returns a list of all the application users, except the current user
-     * (if the application is correctly configured, it should be the super admin).
+     * Renders the list of administrated users.
      *
      * @return Response
      */
     public function indexAction()
     {
-        $currentUser = $this->getUser();
-        $users = $this->getUserRepository()->findAllBut($currentUser);
+        $users = $this->get('carcel_user.manager.users')->getAdministrableUsers();
         $deleteForms = $this->getUserFormFactory()->createDeleteFormViews($users, 'carcel_user_admin_remove');
 
         return $this->render(
@@ -75,19 +74,23 @@ class AdminController extends Controller
      */
     public function setRoleAction(Request $request, $username)
     {
-        $rolesManager = $this->get('carcel_user.manager.roles');
         $user = $this->findUserByUsernameOr404($username);
-        $userRole = $rolesManager->getUserRole($user);
-        $choices = $rolesManager->getChoices();
-        $form = $this->getUserFormFactory()->createSetRoleForm($choices, $userRole);
 
+        if (!$this->getUser()->isSuperAdmin() && $user->hasRole('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $rolesManager = $this->get('carcel_user.manager.roles');
+        $userManager = $this->get('carcel_user.manager.users');
+
+        $userRole = $rolesManager->getUserRole($user);
+
+        $form = $this->getUserFormFactory()->createSetRoleForm($userRole);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $selectedRole = $form->getData();
-            $user->setRoles([$choices[$selectedRole['roles']]]);
-
-            $this->get('doctrine.orm.entity_manager')->flush();
+            $userManager->setRole($user, $selectedRole);
 
             $this->addFlash(
                 'notice',
@@ -175,15 +178,16 @@ class AdminController extends Controller
      */
     public function removeUserAction(Request $request, $username)
     {
+        $user = $this->findUserByUsernameOr404($username);
         $form = $this->getUserFormFactory()->createDeleteForm($username, 'carcel_user_admin_remove');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $user = $this->findUserByUsernameOr404($username);
             $email = $user->getEmail();
 
-            $this->get('doctrine.orm.entity_manager')->remove($user);
-            $this->get('doctrine.orm.entity_manager')->flush();
+            $entityManager = $this->get('doctrine.orm.entity_manager');
+            $entityManager->remove($user);
+            $entityManager->flush();
 
             $this->addFlash(
                 'notice',
@@ -198,16 +202,23 @@ class AdminController extends Controller
 
     /**
      * Finds and returns a User from its username.
+     * A regular administrator cannot get the super administrator, as he has no
+     * right to access its profile.
      *
      * @param string $username
      *
      * @throws NotFoundHttpException
+     * @throws AccessDeniedException
      *
      * @return UserInterface
      */
     protected function findUserByUsernameOr404($username)
     {
         $user = $this->getUserRepository()->findOneBy(['username' => $username]);
+
+        if (!$this->getUser()->isSuperAdmin() && $user->isSuperAdmin()) {
+            throw $this->createAccessDeniedException();
+        }
 
         if (null === $user) {
             throw new  NotFoundHttpException(

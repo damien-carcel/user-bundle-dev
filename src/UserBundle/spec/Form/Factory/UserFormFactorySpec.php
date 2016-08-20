@@ -11,8 +11,13 @@
 
 namespace spec\Carcel\Bundle\UserBundle\Form\Factory;
 
+use Carcel\Bundle\UserBundle\Form\Factory\UserFormFactory;
+use Carcel\Bundle\UserBundle\Form\Factory\UserFormFactoryInterface;
+use Carcel\Bundle\UserBundle\Manager\RolesManager;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -29,19 +34,20 @@ class UserFormFactorySpec extends ObjectBehavior
     function let(
         FormFactoryInterface $formFactory,
         RouterInterface $router,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        RolesManager $rolesManager
     ) {
-        $this->beConstructedWith($formFactory, $router, $translator);
+        $this->beConstructedWith($formFactory, $router, $translator, $rolesManager);
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Carcel\Bundle\UserBundle\Form\Factory\UserFormFactory');
+        $this->shouldHaveType(UserFormFactory::class);
     }
 
     function it_is_a_user_form_factory()
     {
-        $this->shouldImplement('Carcel\Bundle\UserBundle\Form\Factory\UserFormFactoryInterface');
+        $this->shouldImplement(UserFormFactoryInterface::class);
     }
 
     function it_creates_a_create_form(
@@ -95,7 +101,7 @@ class UserFormFactorySpec extends ObjectBehavior
         $builder->setAction('user/delete')->willReturn($builder);
         $builder->setMethod('DELETE')->willReturn($builder);
         $builder
-            ->add('submit', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', [
+            ->add('submit', SubmitType::class, [
                 'label' => 'Delete',
                 'attr'  => [
                     'class'   => 'btn btn-sm btn-default',
@@ -128,7 +134,7 @@ class UserFormFactorySpec extends ObjectBehavior
         $builder->setAction('user/delete')->willReturn($builder);
         $builder->setMethod('DELETE')->willReturn($builder);
         $builder
-            ->add('submit', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', [
+            ->add('submit', SubmitType::class, [
                 'label' => 'Delete',
                 'attr'  => [
                     'class'   => 'btn btn-sm btn-default',
@@ -146,27 +152,37 @@ class UserFormFactorySpec extends ObjectBehavior
     function it_creates_a_form_to_set_users_role(
         $formFactory,
         $translator,
+        $rolesManager,
         FormBuilderInterface $builder,
         FormInterface $form
     ) {
         $formFactory->createBuilder()->willReturn($builder);
         $translator->trans('carcel_user.button.change')->willReturn('Change');
         $translator->trans('carcel_user.form.role.label')->willReturn('Roles');
+        $rolesManager->getChoices()->willReturn([
+            'ROLE_USER'        => 'ROLE_USER',
+            'ROLE_ADMIN'       => 'ROLE_ADMIN',
+            'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+        ]);
 
         $builder
-            ->add('roles', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', [
-                'choices' => ['role1', 'role2', 'role3'],
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                  'ROLE_USER'        => 'ROLE_USER',
+                  'ROLE_ADMIN'       => 'ROLE_ADMIN',
+                  'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+                ],
                 'label'   => 'Roles',
-                'data'    => 'role1',
+                'data'    => 'ROLE_USER',
             ])
             ->willReturn($builder);
 
         $builder
-            ->add('submit', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', ['label' => 'Change'])
+            ->add('submit', SubmitType::class, ['label' => 'Change'])
             ->willReturn($builder);
 
         $builder->getForm()->willReturn($form);
 
-        $this->createSetRoleForm(['role1', 'role2', 'role3'], 'role1');
+        $this->createSetRoleForm('ROLE_USER');
     }
 }
