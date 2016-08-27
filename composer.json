@@ -14,7 +14,7 @@
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle",
-            "Carcel\\Bundle\\UserBundle\\": "src/UserBundle",
+            "Carcel\\Bundle\\UserBundle\\": "src/UserBundle/src",
             "Context\\": "features/bootstrap"
         },
         "classmap": [
