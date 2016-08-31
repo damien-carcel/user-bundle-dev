@@ -11,17 +11,20 @@
 
 namespace Context;
 
+use Behat\Mink\Exception\DriverException;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Driver\KernelDriver;
 use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
 use Carcel\Bundle\UserBundle\Manager\UserManager;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
@@ -58,7 +61,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      *
      * @param string $username
      *
-     * @Then /^I should be authenticated as "(?P<username>(?:[^"]|\\")*)"$/
+     * @Then /^I should be authenticated as "(?P<username>[^"]*)"$/
      */
     public function iShouldBeAuthenticatedAs($username)
     {
@@ -90,7 +93,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      *
      * @param string $username
      *
-     * @Given /^I reset "(?P<username>(?:[^"]|\\")*)" password$/
+     * @Given /^I reset "(?P<username>[^"]*)" password$/
      */
     public function iResetUserPassword($username)
     {
@@ -129,7 +132,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      * @param string $action
      * @param string $username
      *
-     * @When /^I follow "(?P<action>(?:[^"]|\\")*)" for "(?P<user>(?:[^"]|\\")*)" profile$/
+     * @When /^I follow "(?P<action>[^"]*)" for "(?P<username>[^"]*)" profile$/
      */
     public function iFollowTheActionLinkForTheUserProfile($action, $username)
     {
@@ -148,7 +151,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      * @param string $action
      * @param string $username
      *
-     * @When /^I press "(?P<action>(?:[^"]|\\")*)" for "(?P<user>(?:[^"]|\\")*)" profile$/
+     * @When /^I press "(?P<action>[^"]*)" for "(?P<user>[^"]*)" profile$/
      */
     public function iPressTheActionLinkForTheUserProfile($action, $username)
     {
@@ -162,12 +165,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
-     * Asserts that a user have a defined role.
+     * Checks that a user have a defined role.
      *
      * @param string $username
      * @param string $role
      *
-     * @Then /^user "(?P<username>(?:[^"]|\\")*)" should have role "(?P<role>(?:[^"]|\\")*)"$/
+     * @Then /^user "(?P<username>[^"]*)" should have role "(?P<role>[^"]*)"$/
      */
     public function userShouldHaveRole($username, $role)
     {
@@ -176,18 +179,93 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
-     * Asserts that a specific table line does not contain a specific text.
+     * Checks that a specific table line does not contain a specific text.
      *
      * @param string $line
      * @param string $text
      *
-     * @Then /^I should not see "(?P<text>(?:[^"]|\\")*)" in the table line containing "(?P<line>(?:[^"]|\\")*)"$/
+     * @Then /^I should not see "(?P<text>[^"]*)" in the table line containing "(?P<line>[^"]*)"$/
      */
-    public function assertTableLineNotContainsText($line, $text)
+    public function iShouldNotSeeTheTextInTheTableLine($line, $text)
     {
         $element = sprintf('table tr:contains("%s")', $line);
 
         $this->assertElementNotContainsText($element, $text);
+    }
+
+    /**
+     * Checks that a mail with a specific subject has been sent.
+     *
+     * @Then /^I should get a confirmation email with subject "(?P<subject>[^"]*)"$/
+     */
+    public function iShouldGetConfirmationEmailWithSubject($subject)
+    {
+        $collector = $this->getSymfonyProfile()->getCollector('swiftmailer');
+
+        \PHPUnit_Framework_Assert::assertEquals(1, $collector->getMessageCount());
+
+        $messages = $collector->getMessages();
+        $message = $messages[0];
+
+        \PHPUnit_Framework_Assert::assertEquals($subject, $message->getSubject());
+    }
+
+    /**
+     * Disables the automatic following of redirections.
+     *
+     * @When /^I stop following redirections$/
+     */
+    public function disableFollowRedirects()
+    {
+        $this->getSymfonyClient()->followRedirects(false);
+    }
+
+    /**
+     * Enables the automatic following of redirections.
+     *
+     * @When /^I start following redirections$/
+     */
+    public function enableFollowRedirects()
+    {
+        $this->getSymfonyClient()->followRedirects(true);
+    }
+
+    /**
+     * Gets the current Symfony profile.
+     *
+     * @throws \RuntimeException
+     *
+     * @return Profile
+     */
+    protected function getSymfonyProfile()
+    {
+        $profile = $this->getSymfonyClient()->getProfile();
+        if (false === $profile) {
+            throw new \RuntimeException('No profile associated with the current client response');
+        }
+
+        return $profile;
+    }
+
+    /**
+     * Gets the current Symfony cient.
+     *
+     * @throws DriverException
+     *
+     * @return Client
+     */
+    protected function getSymfonyClient()
+    {
+        $driver = $this->getSession()->getDriver();
+
+        if (!$driver instanceof KernelDriver) {
+            throw new DriverException(sprintf(
+                'Expects driver to be an instance of %s',
+                KernelDriver::class
+            ));
+        }
+
+        return $driver->getClient();
     }
 
     /**
