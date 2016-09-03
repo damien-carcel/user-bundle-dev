@@ -12,7 +12,6 @@
 namespace Carcel\Bundle\UserBundle\Manager;
 
 use Carcel\Bundle\UserBundle\Factory\SwiftMessageFactory;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -31,27 +30,21 @@ class MailManager
     /** @var SwiftMessageFactory */
     protected $messageFactory;
 
-    /** @var EngineInterface */
-    protected $templating;
-
     /** @var TranslatorInterface */
     protected $translator;
 
     /**
      * @param \Swift_Mailer       $mailer
-     * @param EngineInterface     $templating
      * @param TranslatorInterface $translator
      * @param SwiftMessageFactory $messageFactory
      * @param string              $mailerAddress
      */
     public function __construct(
         \Swift_Mailer $mailer,
-        EngineInterface $templating,
         TranslatorInterface $translator,
         SwiftMessageFactory $messageFactory,
         $mailerAddress
     ) {
-        $this->templating = $templating;
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->messageFactory = $messageFactory;
@@ -61,24 +54,27 @@ class MailManager
     /**
      * Sends an email.
      *
-     * @param string $email
+     * @param string $mailAddress
      * @param string $username
+     * @param string $subject
+     * @param string $body
      *
      * @return int The number of successful recipients. Can be 0 which indicates failure
      */
-    public function send($email, $username)
+    public function send($mailAddress, $username, $subject, $body)
     {
+        $subject = $this->translator->trans($subject);
+        $body = $this->translator->trans(
+            $body,
+            ['%username%' => $username]
+        );
+
         $message = $this->messageFactory->create();
         $message
-            ->setSubject($this->translator->trans('carcel_user.account.remove'))
+            ->setSubject($subject)
             ->setFrom($this->mailerAddress)
-            ->setTo($email)
-            ->setBody(
-                $this->templating->render(
-                    'CarcelUserBundle:Admin:email.txt.twig',
-                    ['username' => $username]
-                )
-            );
+            ->setTo($mailAddress)
+            ->setBody($body);
 
         return $this->mailer->send($message);
     }
