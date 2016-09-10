@@ -231,6 +231,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
+     * @When /^I follow the activation link for the user "(?P<username>[^"]*)"$/
+     */
+    public function iFollowTheActivationLinkForTheUser($username)
+    {
+        $user = $this->getUserRepository()->findOneBy(['username' => $username]);
+        $activationToken = $user->getConfirmationToken();
+
+        $this->visitPath('register/confirm/'.$activationToken);
+    }
+
+    /**
      * Gets the current Symfony profile.
      *
      * @throws \RuntimeException
