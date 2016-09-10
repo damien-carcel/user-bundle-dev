@@ -17,6 +17,10 @@ Feature: Create account
         | Repeat password | pandore                 |
     And I press "Register"
     Then I should see "The user has been created successfully"
+    And I should see "An email has been sent to pandore@userbundle.info. It contains an activation link you must click to activate your account."
+    And I should be anonymous
+    When I follow the activation link for the user "pandore"
+    Then I should see "Congrats pandore, your account is now activated."
     And I should be authenticated as "pandore"
 
   Scenario: I can see a warning message when trying to create an account with an existing username
