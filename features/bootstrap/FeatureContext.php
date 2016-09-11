@@ -231,6 +231,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     }
 
     /**
+     * Activates a user thanks to its activation token.
+     *
+     * @param string $username
+     *
      * @When /^I follow the activation link for the user "(?P<username>[^"]*)"$/
      */
     public function iFollowTheActivationLinkForTheUser($username)
@@ -239,6 +243,43 @@ class FeatureContext extends MinkContext implements KernelAwareContext
         $activationToken = $user->getConfirmationToken();
 
         $this->visitPath('register/confirm/'.$activationToken);
+    }
+
+    /**
+     * Checks that a user is active.
+     *
+     * @param string $username
+     *
+     * @Then /^user "(?P<username>[^"]*)" should be enabled$/
+     */
+    public function userShouldBeEnabled($username)
+    {
+        $this->assertUserStatus($username, true);
+    }
+
+    /**
+     * Checks that a user is unactive.
+     *
+     * @param string $username
+     *
+     * @Then /^user "(?P<username>[^"]*)" should be disabled$/
+     */
+    public function userShouldBeDisabled($username)
+    {
+        $this->assertUserStatus($username, false);
+    }
+
+    /**
+     * Asserts a user status.
+     *
+     * @param string $username
+     * @param bool $status
+     */
+    protected function assertUserStatus($username, $status)
+    {
+        $user = $this->getUserRepository()->findOneBy(['username' => $username]);
+
+        \PHPUnit_Framework_Assert::assertTrue($status === $user->isEnabled());
     }
 
     /**

@@ -1,7 +1,7 @@
-Feature: Manage a user account
+Feature: See user profiles
   In order to administrate user accounts
   As an administrator
-  I need to interact with the administration page
+  I need to be able to see a user profile
 
   Background:
     Given I am on the homepage

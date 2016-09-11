@@ -1,7 +1,7 @@
-Feature: Manage a user account
+Feature: Change users roles
   In order to administrate user accounts
   As an administrator
-  I need to interact with the administration page
+  I need to be able to change a user roles
 
   Background:
     Given I am on the homepage
