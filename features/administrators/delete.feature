@@ -1,7 +1,7 @@
-Feature: Manage a user account
+Feature: Delete a user account
   In order to administrate user accounts
   As an administrator
-  I need to interact with the administration page
+  I need to be able to delete a user account
 
   Background:
     Given I am on the homepage

@@ -1,4 +1,4 @@
-Feature: Manage a user account
+Feature: Manage user accounts
   In order to administrate user accounts
   As an administrator
   I need to interact with the administration page

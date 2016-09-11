@@ -32,3 +32,12 @@ Feature: Administrate administrators
     And I press "Change"
     Then I should see "User role has been changed"
     And user "aurore" should have role "ROLE_USER"
+
+  Scenario: I can change the status of an administrator
+    Given I am on "admin"
+    When I follow "Deactivate" for "aurore" profile
+    Then I should see "User has been deactivated"
+    And user "aurore" should be disabled
+    When I follow "Activate" for "aurore" profile
+    Then I should see "User has been activated"
+    And user "aurore" should be enabled
