@@ -4,7 +4,7 @@
     "type": "symfony-application",
     "description": "Development application for CarcelUserBundle",
     "keywords": ["User management"],
-    "homepage": "https://github.com/damien-carcel/UserBundleDev",
+    "homepage": "https://github.com/damien-carcel/user-bundle-dev",
     "authors": [
         {
             "name": "Damien Carcel",
@@ -70,6 +70,10 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ]
     },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "stable",
     "extra": {
         "symfony-app-dir": "app",
         "symfony-bin-dir": "bin",
@@ -80,8 +84,5 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    },
-    "config": {
-        "bin-dir": "bin"
     }
 }
