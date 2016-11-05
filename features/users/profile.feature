@@ -38,7 +38,7 @@ Feature: Manage a user account
       | Username         | pandore |
       | Current password | pandore |
     And I press "Update"
-    Then I should see "This value should be the user's current password."
+    Then I should see "The entered password is invalid"
 
   Scenario: I can change my password
     Given I am on "profile"
@@ -66,7 +66,7 @@ Feature: Manage a user account
       | New password        | pandore |
       | Repeat new password | pandore |
     And I press "Change password"
-    Then I should see "This value should be the user's current password."
+    Then I should see "The entered password is invalid"
 
   Scenario: I cannot change my password if I don't confirm the new one
     Given I am on "profile"
