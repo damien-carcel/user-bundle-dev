@@ -49,7 +49,6 @@
         "friendsofphp/php-cs-fixer": "^1.11",
         "phpmd/phpmd": "^2.4",
         "phpspec/phpspec": "^3.0",
-        "phpunit/phpunit": "^5.4",
         "squizlabs/php_codesniffer": "^2.5"
     },
     "scripts": {
