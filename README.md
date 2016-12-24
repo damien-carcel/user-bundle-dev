@@ -46,8 +46,8 @@ Just clone the repository, and install dependencies by running `php composer.pha
 Then you can populate this database with a basic set of [doctrine fixtures](https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) provided by the bundle (or create your own, of course):
 
 ```bash
-php bin/console doctrine:schema:update --force
-php bin/console doctrine:fixtures:load
+bin/console doctrine:schema:update --force
+bin/console doctrine:fixtures:load
 ```
 
 ### Deploy the assets
@@ -64,7 +64,7 @@ bower update
 The application is now ready to run. You can either configure a HTTP server of your choice (Apache, nginx…) or use the Symfony internal server:
 
 ```bash
-php bin/console server:run
+bin/console server:run
 ```
 
 You should now be able to display the login page (your.application.domain.name/login).

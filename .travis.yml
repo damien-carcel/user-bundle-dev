@@ -1,8 +1,9 @@
 language: php
 
 php:
-    - "5.6"
-    - "7.0"
+    - '5.6'
+    - '7.0'
+    - '7.1'
 
 git:
     depth: 10
@@ -26,6 +27,6 @@ install:
     - bin/console doctrine:schema:update --force --env=test > /dev/null
 
 script:
-    - ./bin/php-cs-fixer fix --dry-run -v --diff --config-file=.php_cs.php
-    - ./bin/phpspec run
-    - ./bin/behat features
+    - bin/php-cs-fixer fix --dry-run -v --diff --config-file=.php_cs.php
+    - bin/behat features
+    - cd src/UserBundle && composer update --prefer-dist --no-interaction --no-scripts && bin/phpspec run
