@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  fpm:
+    image: carcel/fpm
+    depends_on:
+      - mysql
+    environment:
+      PHP_XDEBUG_ENABLED: 0
+    user: docker
+    volumes:
+      - ./:/home/docker/symfony
+      - ~/.composer:/home/docker/.composer
+    working_dir: /home/docker/symfony
+    networks:
+      - user-bundle
+
+  nginx:
+    image: carcel/nginx
+    depends_on:
+      - fpm
+    ports:
+      - '8080:80'
+    volumes:
+      - ./:/home/docker/symfony
+    networks:
+      - user-bundle
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user_bundle
+      - MYSQL_PASSWORD=user_bundle
+      - MYSQL_DATABASE=user_bundle
+    networks:
+      - user-bundle
+
+networks:
+  user-bundle: ~
