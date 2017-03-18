@@ -11,6 +11,7 @@
 
 namespace Context;
 
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\DriverException;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
@@ -214,6 +215,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     /**
      * Checks that a mail with a specific subject has been sent.
      *
+     * @param string $subject
+     *
      * @Then /^I should get a confirmation email with subject "(?P<subject>[^"]*)"$/
      */
     public function iShouldGetConfirmationEmailWithSubject($subject)
@@ -291,7 +294,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      * Asserts a user status.
      *
      * @param string $username
-     * @param bool $status
+     * @param bool   $status
      */
     protected function assertUserStatus($username, $status)
     {
@@ -343,7 +346,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext
      *
      * @param $username
      *
-     * @return mixed
+     * @return NodeElement
      */
     protected function findUserRowByText($username)
     {

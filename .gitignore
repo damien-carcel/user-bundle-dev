@@ -18,3 +18,4 @@
 /web/bundles/
 behat.yml
 composer.lock
+.php_cs.cache
