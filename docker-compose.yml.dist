@@ -6,7 +6,9 @@ services:
     depends_on:
       - mysql
     environment:
+      PHP_IDE_CONFIG: 'serverName=user-bundle-cli'
       PHP_XDEBUG_ENABLED: 0
+      XDEBUG_CONFIG: 'remote_host=xxx.xxx.xxx.xxx'
     user: docker
     volumes:
       - ./:/home/docker/symfony
@@ -19,6 +21,8 @@ services:
     image: carcel/nginx
     depends_on:
       - fpm
+    environment:
+      PHP_IDE_CONFIG: 'serverName=user-bundle'
     ports:
       - '8080:80'
     volumes:
