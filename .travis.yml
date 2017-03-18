@@ -26,6 +26,7 @@ install:
     - bin/console doctrine:schema:update --force --env=test > /dev/null
 
 script:
+    - bin/phpcs -p --standard=PSR2 --extensions=php src/UserBundle/src
     - bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
     - bin/behat features
     - cd src/UserBundle && composer update --prefer-dist --no-interaction --no-scripts && bin/phpspec run
