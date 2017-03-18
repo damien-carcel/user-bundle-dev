@@ -1,3 +1,4 @@
+@fixtures
 Feature: Reset password
   In order to access the application
   As an anonymous user

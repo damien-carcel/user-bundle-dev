@@ -1,3 +1,4 @@
+@fixtures
 Feature: Delete a user account
   In order to administrate user accounts
   As an administrator
@@ -10,7 +11,7 @@ Feature: Delete a user account
     And I fill in "Username" with "aurore"
     And I fill in "Password" with "aurore"
     And I press "Log in"
-
+  @fixtures
   Scenario: I can delete a user
     Given I am on "admin"
     When I press "Delete" for "damien" profile
