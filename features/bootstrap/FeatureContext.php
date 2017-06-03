@@ -18,10 +18,7 @@ use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Driver\KernelDriver;
 use Carcel\Bundle\UserBundle\Entity\Repository\UserRepositoryInterface;
 use Carcel\Bundle\UserBundle\Manager\UserManager;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader as DataFixturesLoader;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -58,21 +55,6 @@ class FeatureContext extends MinkContext implements KernelAwareContext
     public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
-    }
-
-    /**
-     * @BeforeScenario @fixtures
-     */
-    public function loadFixtures()
-    {
-        $entityManager = $this->kernel->getContainer()->get('doctrine.orm.entity_manager');
-
-        $loader = new DataFixturesLoader($this->kernel->getContainer());
-        $loader->loadFromFile($this->kernel->getRootDir().'/../src/UserBundle/src/DataFixtures/ORM/LoadUserData.php');
-
-        $purger = new ORMPurger($entityManager);
-        $executor = new ORMExecutor($entityManager, $purger);
-        $executor->execute($loader->getFixtures());
     }
 
     /**

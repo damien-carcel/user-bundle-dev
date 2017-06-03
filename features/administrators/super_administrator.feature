@@ -1,4 +1,3 @@
-@fixtures
 Feature: Administrate administrators
   In order to administrate users including administrators
   As the super administrator

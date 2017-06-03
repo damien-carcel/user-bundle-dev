@@ -1,4 +1,3 @@
-@fixtures
 Feature: Manage user accounts
   In order to administrate user accounts
   As an administrator
