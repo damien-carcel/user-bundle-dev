@@ -33,7 +33,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  *
  * @author Damien Carcel <damien.carcel@gmail.com>
  */
-class FeatureContext extends MinkContext implements KernelAwareContext
+class UserBundleFeatureContext extends MinkContext implements KernelAwareContext
 {
     /** @var KernelInterface */
     protected $kernel;

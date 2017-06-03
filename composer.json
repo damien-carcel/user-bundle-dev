@@ -15,7 +15,7 @@
         "psr-4": {
             "AppBundle\\": "src/AppBundle",
             "Carcel\\Bundle\\UserBundle\\": "src/UserBundle/src",
-            "Context\\": "features/bootstrap"
+            "Context\\": "src/UserBundle/features/bootstrap"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
