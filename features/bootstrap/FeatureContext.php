@@ -34,7 +34,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 /**
  * Defines application features for authentication.
  *
- * @author Damien Carcel (damien.carcel@gmail.com)
+ * @author Damien Carcel <damien.carcel@gmail.com>
  */
 class FeatureContext extends MinkContext implements KernelAwareContext
 {
