@@ -1,62 +1,6 @@
 filter:
     paths:
-        - src/*
+        - ./src/UserBundle/*
     excluded_paths:
-        - bin/*
-        - src/AppBundle/*
-
-tools:
-    php_mess_detector:
-        filter:
-            paths:
-                - src/*
-            excluded_paths:
-                - bin/*
-                - src/AppBundle/*
-                - src/UserBundle/spec/*
-    php_cs_fixer:
-        config:
-            level: all
-    php_analyzer:
-        filter:
-            paths:
-                - src/*
-            excluded_paths:
-                - bin/*
-                - src/AppBundle/*
-                - src/UserBundle/spec/*
-    php_code_sniffer:
-        config:
-            standard: PSR2
-        filter:
-            paths:
-                - src/*
-            excluded_paths:
-                - bin/*
-                - src/AppBundle/*
-                - src/UserBundle/spec/*
-    sensiolabs_security_checker: true
-    php_cpd:
-        filter:
-            paths:
-                - src/*
-            excluded_paths:
-                - bin/*
-                - src/AppBundle/*
-                - src/UserBundle/spec/*
-    php_loc:
-        excluded_dirs:
-            - app/
-            - bin/
-            - features/
-            - src/AppBundle/*
-            - vendor/
-            - web/
-    php_pdepend:
-        excluded_dirs:
-            - app/
-            - bin/
-            - features/
-            - src/AppBundle/*
-            - vendor/
-            - web/
+        - ./src/UserBundle/features/*
+        - ./src/UserBundle/spec/*
