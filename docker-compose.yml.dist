@@ -2,7 +2,7 @@ version: '2'
 
 services:
   fpm:
-    image: carcel/fpm
+    image: carcel/fpm:7.1
     depends_on:
       - mysql
     environment:
