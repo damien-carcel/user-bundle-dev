@@ -1,4 +1,3 @@
-@fixtures
 Feature: Manage a user account
   In order to manage my user account
   As a user
@@ -13,14 +12,14 @@ Feature: Manage a user account
     And I press "Log in"
 
   Scenario: I can access my profile
-    When I am on "profile"
+    When I am on "profile/"
     Then I should see "damien user profile"
     And I should see "Logged in as damien"
     When I follow "damien"
     Then I should see "damien user profile"
 
   Scenario: I can edit my profile:
-    Given I am on "profile"
+    Given I am on "profile/"
     When I follow "Edit profile"
     Then I should be on "profile/edit"
     When I fill in the following:
@@ -33,7 +32,7 @@ Feature: Manage a user account
     And I should see "Email: pandore@userbundle.info"
 
   Scenario: I cannot edit my profile without my password
-    Given I am on "profile"
+    Given I am on "profile/"
     And I follow "Edit profile"
     When I fill in the following:
       | Username         | pandore |
@@ -42,7 +41,7 @@ Feature: Manage a user account
     Then I should see "The entered password is invalid"
 
   Scenario: I can change my password
-    Given I am on "profile"
+    Given I am on "profile/"
     When I follow "Change password"
     Then I should be on "profile/change-password"
     When I fill in the following:
@@ -60,7 +59,7 @@ Feature: Manage a user account
     And I should see "Username: damien"
 
   Scenario: I cannot change my password without knowing it
-    Given I am on "profile"
+    Given I am on "profile/"
     And I follow "Change password"
     When I fill in the following:
       | Current password    | pandore |
@@ -70,7 +69,7 @@ Feature: Manage a user account
     Then I should see "The entered password is invalid"
 
   Scenario: I cannot change my password if I don't confirm the new one
-    Given I am on "profile"
+    Given I am on "profile/"
     And I follow "Change password"
     When I fill in the following:
       | Current password    | damien  |

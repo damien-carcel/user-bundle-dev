@@ -1,4 +1,3 @@
-@fixtures
 Feature: Administrate administrators
   In order to administrate users including administrators
   As the super administrator
@@ -13,7 +12,7 @@ Feature: Administrate administrators
     And I press "Log in"
 
   Scenario: I can list all users but me
-    Given I am on "profile"
+    Given I am on "profile/"
     When I follow "Administration page"
     Then I should see "Administration of the users"
     And I should see the users "aurore, damien, freya and lilith"

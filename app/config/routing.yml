@@ -1,18 +1,17 @@
 fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    resource: '@FOSUserBundle/Resources/config/routing/all.xml'
 
 carcel_user:
-    resource: "@CarcelUserBundle/Resources/config/routing.yml"
-    prefix: /
+    resource: '@CarcelUserBundle/Resources/config/routing.yml'
 
 app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+    resource: '@AppBundle/Controller/'
+    type: annotation
 
 # redirecting the root
 root:
     path: /
     defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
+        _controller: 'FrameworkBundle:Redirect:urlRedirect'
         path: /
         permanent: true

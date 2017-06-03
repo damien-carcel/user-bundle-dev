@@ -2,7 +2,7 @@ version: '2'
 
 services:
   fpm:
-    image: carcel/fpm
+    image: carcel/fpm:7.1
     depends_on:
       - mysql
     environment:
@@ -11,9 +11,9 @@ services:
       XDEBUG_CONFIG: 'remote_host=xxx.xxx.xxx.xxx'
     user: docker
     volumes:
-      - ./:/home/docker/symfony
+      - ./:/home/docker/application
       - ~/.composer:/home/docker/.composer
-    working_dir: /home/docker/symfony
+    working_dir: /home/docker/application
     networks:
       - user-bundle
 
@@ -26,7 +26,7 @@ services:
     ports:
       - '8080:80'
     volumes:
-      - ./:/home/docker/symfony
+      - ./:/home/docker/application
     networks:
       - user-bundle
 
