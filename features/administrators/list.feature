@@ -12,7 +12,7 @@ Feature: Manage user accounts
     And I press "Log in"
 
   Scenario: I can see all users on the admin page
-    Given I am on "profile"
+    Given I am on "profile/"
     When I follow "Administration page"
     Then I should see "Administration of the users"
     And I should see the users "damien, freya and lilith"

@@ -20,7 +20,7 @@ Feature: Authenticate users
     And I fill in "Password" with "admin"
     And I press "Log in"
     Then I should be authenticated as "admin"
-    When I go to "profile"
+    When I go to "profile/"
     And I follow "Log out"
     Then I should be anonymous
 
@@ -32,7 +32,7 @@ Feature: Authenticate users
     Then I should see "Invalid credentials."
 
   Scenario: I am redirected to login page when anonymously authenticated
-    When I go to "profile"
+    When I go to "profile/"
     Then I should be on "profile/"
     But the "div" element should contain "class=\"login-wall panel panel-default\""
     And I should see "Remember me"
