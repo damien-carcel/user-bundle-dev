@@ -2,23 +2,24 @@ version: '2'
 
 services:
   fpm:
-    image: carcel/fpm:7.1
+    image: akeneo/fpm:7.1
     depends_on:
       - mysql
     environment:
+      COMPOSER_HOME: /home/docker/.composer
       PHP_IDE_CONFIG: 'serverName=user-bundle-cli'
       PHP_XDEBUG_ENABLED: 0
       XDEBUG_CONFIG: 'remote_host=xxx.xxx.xxx.xxx'
     user: docker
     volumes:
-      - ./:/home/docker/application
+      - ./:/srv/application
       - ~/.composer:/home/docker/.composer
-    working_dir: /home/docker/application
+    working_dir: /srv/application
     networks:
       - user-bundle
 
   nginx:
-    image: carcel/nginx
+    image: nginx
     depends_on:
       - fpm
     environment:
@@ -26,7 +27,9 @@ services:
     ports:
       - '8080:80'
     volumes:
-      - ./:/home/docker/application
+      - ./:/srv/application
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/upload.conf:/etc/nginx/conf.d/upload.conf
     networks:
       - user-bundle
 
@@ -37,6 +40,8 @@ services:
       - MYSQL_USER=user_bundle
       - MYSQL_PASSWORD=user_bundle
       - MYSQL_DATABASE=user_bundle
+    ports:
+      - '3306:3306'
     networks:
       - user-bundle
 
