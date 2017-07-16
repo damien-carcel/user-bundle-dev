@@ -27,7 +27,7 @@ install:
     - bower update
 
 script:
-    - bin/phpcs -p --standard=PSR2 --extensions=php src/UserBundle/src
-    - bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
-    - bin/behat src/UserBundle/features
-    - cd src/UserBundle && composer update --prefer-dist --no-interaction --no-scripts && bin/phpspec run
+    - vendor/bin/phpcs -p --standard=PSR2 --extensions=php src/UserBundle/src
+    - vendor/bin/php-cs-fixer fix --dry-run -v --diff --config=.php_cs.php
+    - vendor/bin/behat src/UserBundle/features
+    - cd src/UserBundle && composer update --prefer-dist --no-interaction --no-scripts && vendor/bin/phpspec run
