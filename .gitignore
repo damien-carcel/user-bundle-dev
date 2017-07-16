@@ -2,6 +2,9 @@
 /bin/*
 !/bin/console
 !/bin/symfony_requirements
+/docker/*
+!/docker/nginx.conf
+!/docker/upload.conf
 /var/*
 !/var/cache
 /var/cache/*
@@ -18,4 +21,5 @@
 /web/bundles/
 behat.yml
 composer.lock
+docker-compose.yml
 .php_cs.cache
