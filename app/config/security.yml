@@ -5,8 +5,8 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
-        ROLE_EDITOR:      ROLE_USER
-        ROLE_ADMIN:       ROLE_EDITOR
+        ROLE_VIEWER:      ROLE_USER
+        ROLE_ADMIN:       ROLE_VIEWER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
