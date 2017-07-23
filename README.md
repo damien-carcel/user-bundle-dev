@@ -25,7 +25,7 @@ If you encountered a bug or miss a functionality, don't hesitate to raise an iss
 
 ## Requirements
 
-- PHP 5.6+
+- PHP 7.1+
 - PHP Modules:
     - apcu
     - curl
@@ -33,21 +33,35 @@ If you encountered a bug or miss a functionality, don't hesitate to raise an iss
     - intl
     - mysql
     - mcrypt
-- MySQL 5.1 and above or MariaDB
+- MySQL or MariaDB
 
 ## Installation
 
+The following part assume the use of Docker and Docker Compose. However, the same commands (without the Docker part) can be used on a local environment.
+
 ### Download and install from GitHub
 
-If you didn't, start by [installing composer](https://getcomposer.org/download/). You also need to prepare a MySQL database.
+Just clone the repository, the copy the file `docker-compose.yml.dist` by removing the `.dist` extension.
 
-Just clone the repository, and install dependencies by running `php composer.phar update`. Composer will ask you for your application configuration (database name, user and password).
-
-Then you can populate this database with a basic set of [doctrine fixtures](https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) provided by the bundle (or create your own, of course):
+Up the containers by running 
 
 ```bash
-bin/console doctrine:schema:update --force
-bin/console doctrine:fixtures:load
+docker-compose up -d
+```
+
+and install dependencies with
+
+```bash
+docker-compose exec fpm composer update
+```
+
+Composer will ask you for your application configuration (database name, user and password).
+
+You can now populate this database with a basic set of [doctrine fixtures](https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) provided by the bundle (or create your own, of course):
+
+```bash
+docker-compose exec fpm bin/console doctrine:schema:update --force
+docker-compose exec fpm bin/console doctrine:fixtures:load
 ```
 
 ### Deploy the assets
@@ -55,19 +69,11 @@ bin/console doctrine:fixtures:load
 Run the following command:
 
 ```bash
-bin/console assets:install
-bower update
+docker-compose exec fpm bin/console assets:install --symlink
+docker-compose run node npm run assets
 ```
 
-### Run the application
-
-The application is now ready to run. You can either configure a HTTP server of your choice (Apache, nginx…) or use the Symfony internal server:
-
-```bash
-bin/console server:run
-```
-
-You should now be able to display the login page (your.application.domain.name/login).
+You should now be able to access the application and login with `localhost:8080/login`.
 
 ## License
 
