@@ -23,8 +23,8 @@ install:
     - mysql -e 'CREATE DATABASE symfony;'
     - bin/console doctrine:schema:update --force --env=test > /dev/null
     - bin/console assets:install
-    - npm install -g bower
-    - bower update
+    - npm install
+    - npm run assets
 
 script:
     - vendor/bin/phpcs -p --standard=PSR2 --extensions=php src/UserBundle/src
