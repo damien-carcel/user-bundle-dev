@@ -5,6 +5,7 @@
 /docker/*
 !/docker/nginx.conf
 !/docker/upload.conf
+/node_modules
 /var/*
 !/var/cache
 /var/cache/*
@@ -19,7 +20,8 @@
 /vendor/
 /web/assets/
 /web/bundles/
-behat.yml
-composer.lock
-docker-compose.yml
-.php_cs.cache
+/behat.yml
+/composer.lock
+/docker-compose.yml
+/package-lock.json
+/.php_cs.cache
