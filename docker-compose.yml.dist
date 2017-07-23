@@ -1,6 +1,16 @@
 version: '2'
 
 services:
+  node:
+    image: node:8
+    user: node
+    volumes:
+      - ./:/srv/application
+      - ~/.npm:/home/node/.npm
+    working_dir: /srv/application
+    networks:
+      - user-bundle
+
   fpm:
     image: akeneo/fpm:7.1
     depends_on:
