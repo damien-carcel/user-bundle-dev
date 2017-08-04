@@ -69,7 +69,7 @@ docker-compose exec fpm bin/console doctrine:fixtures:load
 Run the following command:
 
 ```bash
-docker-compose exec fpm bin/console assets:install --symlink
+docker-compose exec fpm bin/console assets:install --symlink  --relative
 docker-compose run node npm run assets
 ```
 
