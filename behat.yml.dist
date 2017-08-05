@@ -14,7 +14,7 @@ default:
     suites:
         default:
             contexts:
-                - Context\UserBundleFeatureContext:
+                - UserBundleContext\UserBundleFeatureContext:
                     session: '@session'
             paths:
                 - '%paths.base%/src/UserBundle/features'
