@@ -25,5 +25,8 @@
   "homepage": "https://github.com/damien-carcel/user-bundle-dev#readme",
   "dependencies": {
     "bower": "^1.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.8.0"
   }
 }
