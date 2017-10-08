@@ -8,7 +8,6 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
 
-# redirecting the root
 root:
     path: /
     defaults:
