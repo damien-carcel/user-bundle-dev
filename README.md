@@ -61,7 +61,7 @@ You can now populate this database with a basic set of [doctrine fixtures](https
 
 ```bash
 docker-compose exec fpm bin/console doctrine:schema:update --force
-docker-compose exec fpm bin/console doctrine:fixtures:load
+docker-compose exec fpm bin/console doctrine:fixtures:load --fixtures=src/UserBundle/features/Context/DataFixtures/ORM/LoadUserData.php 
 ```
 
 ### Deploy the assets
@@ -70,7 +70,8 @@ Run the following command:
 
 ```bash
 docker-compose exec fpm bin/console assets:install --symlink  --relative
-docker-compose run node npm run assets
+docker-compose run node yarn install
+docker-compose run node yarn run assets
 ```
 
 You should now be able to access the application and login with `localhost:8080/login`.
