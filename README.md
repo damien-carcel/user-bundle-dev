@@ -1,8 +1,6 @@
-# CarcelUserBundle - Development application
+# [DEPRECATED] CarcelUserBundle - Development application
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f5b8027a-eb3b-422e-98a2-c138d2ceb426/mini.png)](https://insight.sensiolabs.com/projects/f5b8027a-eb3b-422e-98a2-c138d2ceb426)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/damien-carcel/user-bundle-dev/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/damien-carcel/user-bundle-dev/?branch=master)
-[![Build Status](https://travis-ci.org/damien-carcel/user-bundle-dev.svg?branch=master)](https://travis-ci.org/damien-carcel/user-bundle-dev)
+**All development is now directly done on https://github.com/damien-carcel/UserBundle**
 
 This repository is a Symfony full stack application containing the CarcelUserBundle in its src folder. This application is used only for development purposes.
 
